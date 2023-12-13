@@ -1,0 +1,24 @@
+# 
+fpDfRD <- fpDf0[grepl("rd", fpDf0$model),]
+fpDfRD <- rbind(fpDfRD, adjrdDf)
+fpDfRD$model <- forcats::as_factor(fpDfRD$model)
+
+# ggplot lineplot with error bars:
+# http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/
+plotRDAdjForest <- 
+    ggplot(fpDfRD, aes(x=est, y=model)) +
+    geom_point(shape=124, size=5) +
+    geom_errorbar(width=.15, aes(xmin=lci, xmax=uci), linewidth=1) +
+    geom_vline(xintercept = 0, linetype = "dashed", color="red", linewidth=1) +
+    geom_vline(xintercept = 0.02, linetype = "dashed", color="magenta", linewidth=1) +
+    xlab(label="Risk difference (RD)") +
+    theme(
+        panel.background = element_blank(),
+        axis.text.x=element_text(size=14),
+        axis.title.x=element_text(size=14),
+        # axis.text.y=element_text(size=14),
+        axis.title.y = element_text(size=14),
+        axis.text.y=element_text(size=14),
+        panel.border = element_rect(color="black", fill=NA))
+
+# ggsave(filename="plotRDAdjForest.png", plot = plotRDAdjForest, path = ggsavePath, device = "png", width=8, height=7, units="in", dpi=300)
