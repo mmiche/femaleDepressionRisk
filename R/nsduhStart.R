@@ -1,7 +1,6 @@
 # Load all required packages.
 # BEWARE: A package must first be installed, before it can be loaded. How to install a package in R? Using 'DescTools' and 'survival' as exemplary packages, install them like this:
 # install.packages(c("DescTools", "survival"), dependencies=TRUE)
-#
 library(pwrss)
 library(powerSurvEpi)
 library(DescTools)
