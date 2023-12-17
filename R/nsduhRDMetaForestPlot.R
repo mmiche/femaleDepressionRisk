@@ -8,10 +8,8 @@ rdForest <-
         panel.background = element_blank(),
         axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=14),
-        # axis.text.y=element_text(size=14),
         axis.title.y = element_text(size=14),
         axis.text.y=element_text(size=14),
         panel.border = element_rect(color="black", fill=NA))
-# legend.position = "top")
 
 # ggsave(filename="plotRD8Forest.png", plot = rdForest, path = ggsavePath, device = "png", width=8, height=7, units="in", dpi=300)

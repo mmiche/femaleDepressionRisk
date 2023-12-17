@@ -19,7 +19,7 @@ library(tidyverse)
 # > See R script 'makeNSDUHData.R', to generate this complete dataset, after having downloaded all 10 datasets from the years 2012-2021 from this URL (use the 'Choose Year' drop-down menu):
 # https://www.datafiles.samhsa.gov/dataset/national-survey-drug-use-and-health-2021-nsduh-2021-ds0001
 # 4. Set the complete path to this new directory on your computer. Set it here:
-nsduhPath <- "/Users/mmiche/Desktop/TeachingClass/HS2023/SeminarOpenScience/PsyArXivProjekt/CleanedScripts/"
+nsduhPath <- "/Users/mmiche/Desktop/TeachingClass/HS2023/SeminarOpenScience/PsyArXivProjekt/R/"
 #
 # When initially running this code, you should save the collected results, so that you do not have to recompute the results time after time again. Therefore, remove the sharp (#) symbols in the script nsduhMain.R, in script lines 113-120, 172-173, and 252-256.
 # --------------------------------------------------

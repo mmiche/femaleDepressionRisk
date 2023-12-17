@@ -4,7 +4,7 @@ numberOfTests <- paste(nrow(resDf), "Tests")
 statSignLevel <- c(paste0("p >= ", runRiskDf$a[sel1To15]),
                    paste0("p < ", runRiskDf$a[sel1To15]))
 
-# Compatibility interval level.
+# Compatibility interval level. gsub(...) necessary, otherwise power = .995 will be messed up.
 (cixx <- gsub("\\.", "", 100-(runRiskDf$a[sel1To15]*100)))
 
 plotDf <- resDf; rm(resDf)
@@ -27,20 +27,20 @@ plotRisk <-
     ylab(label=numberOfTests) +
     geom_vline(xintercept = 1, linetype = "dashed", color="red", linewidth=.5) +
     geom_vline(xintercept = 1.2, linetype = "dashed", color="magenta", linewidth=.5) +
+    # # Use below code as template, if you want to adapt the x-axis.
+    # scale_x_continuous(
+    #     trans='log2',
+    #     # RR 1, ..., 2.5
+    #     breaks =
+    #         c(.75, 1, 1.25, 1.5, 2, 2.5),
+    #     labels =
+    #         c(".75", "1", "1.25", "1.5", "2", "2.5")) +
     xlab("Ajdusted Risk Ratio (adjRR)") +
-    scale_x_continuous(
-        trans='log2',
-        # RR 1, ..., 2.5
-        breaks =
-            c(.75, 1, 1.25, 1.5, 2, 2.5),
-        labels =
-            c(".75", "1", "1.25", "1.5", "2", "2.5")) +
     scale_color_manual(values=c("gray", "steelblue"), labels = statSignLevel) +
     theme(
         panel.background = element_blank(),
         axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=14),
-        # axis.text.y=element_text(size=14),
         axis.title.y = element_text(size=14),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),

@@ -16,7 +16,6 @@ plotRDAdjForest <-
         panel.background = element_blank(),
         axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=14),
-        # axis.text.y=element_text(size=14),
         axis.title.y = element_text(size=14),
         axis.text.y=element_text(size=14),
         panel.border = element_rect(color="black", fill=NA))

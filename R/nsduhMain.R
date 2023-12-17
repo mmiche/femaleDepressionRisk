@@ -122,9 +122,9 @@ for(r in 1:nrow(runRiskDf)) {
 # -------------------------
 saveRDS(object=collectRiskResLs,
         file=paste0(nsduhPath, "collectRiskResLs.rds"))
-
-saveRDS(object=collectRisklme4Ls,
-        file=paste0(nsduhPath, "collectRisklme4Ls.rds"))
+# # Not recommended to save, explanation, see runRR_RD_OR.R, script lines 292/293.
+# # saveRDS(object=collectRisklme4Ls,
+# #         file=paste0(nsduhPath, "collectRisklme4Ls.rds"))
 
 saveRDS(object=collectCollapsedLs,
         file=paste0(nsduhPath, "collectCollapsedLs.rds"))

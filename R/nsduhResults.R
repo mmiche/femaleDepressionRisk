@@ -168,6 +168,20 @@ selRiskMeas <- "rr"
 source(paste0(nsduhPath, "nsduhRRRDORForestPlot.R"), echo = FALSE)
 # Display forest plot in R console
 plotRisk
+# Adapt x-axis. BEWARE: RR and OR requires a log-transformed x-axis, RD does not.
+# Use range information, when adapting the x-axis:
+readRDS(file=paste0(nsduhPath, "rangeEstimatesLs.rds"))$rr_rd_or[sel1To15,]
+# If plotRisk shows RR or OR, adapt x-axis like this:
+(plotRisk <- plotRisk +
+    scale_x_continuous(trans='log2',
+                       # Range information, to guide the breaks:
+                       # sel1To15 = 8: risk ratio lower interval minimum = .67, upper interval maximum = Inf, point risk ratio minimum = .93, maximum = 2.49.
+                       breaks = c(.7, 1, 1.3, 1.5, 2, 2.5)))
+# If plotRisk shows RD, adapt x like this:
+plotRisk <- plotRisk +
+    # Range information, to guide the breaks:
+    # sel1To15 = 8: risk difference lower interval minimum = -.06, upper interval maximum = 1, point risk ratio minimum = -.01, maximum = .14.
+    scale_x_continuous(breaks = c(-.05, 0, .05, .15, .3, .5, 1))
 # -------------------------------------------------
 
 # ---------------------------------------
@@ -177,10 +191,10 @@ plotRisk
 collectCollapsedLs <- readRDS(file=paste0(nsduhPath, "collectCollapsedLs.rds"))
 collapseVec <- names(collectCollapsedLs)
 
-# Risk ratio, no collapsibility problem, all results equal 1.
+# Risk ratio, no collapsibility problem, all results equal 1 (good).
 collectCollapsedLs[[collapseVec[sel1To15]]]$riskCollapsed/collectCollapsedLs[[collapseVec[sel1To15]]]$absRiskTotal
 
-# Odds ratio, collapsibility problem, all results are greater than 1.
+# Odds ratio, collapsibility problem, all results are greater than 1 (not good).
 collectCollapsedLs[[collapseVec[sel1To15]]]$oddsCollapsed/collectCollapsedLs[[collapseVec[sel1To15]]]$oddsTotal
 # -------------------------------------------------
 # -------------------------------------------------
@@ -232,7 +246,6 @@ for(p in 1:nrow(runCoxDf)) {
     actyIhrsH0CI <- c(actyIhrsH0CI, length(which(collectCoxResLs[[resDfVec[p]]][,paste0("hr", lowerCI[p])] > 1.2))/tnoct)
     
 }
-
 # Append to runCoxDf:
 runCoxDf <- cbind(runCoxDf,
                   data.frame(
@@ -253,6 +266,15 @@ all((runCoxDf$actyIhrsH0 + runCoxDf$actyIhrsH0CI)==1)
 source(paste0(nsduhPath, "nsduhHRForestPlot.R"), echo = FALSE)
 # Display forest plot in R console
 plotHazard
+
+# Adapt x-axis. BEWARE: RR and OR requires a log-transformed x-axis, RD does not.
+# Use range information, when adapting the x-axis:
+readRDS(file=paste0(nsduhPath, "rangeEstimatesLs.rds"))$hr[sel1To9,]
+(plotHazard <- plotHazard +
+        scale_x_continuous(trans='log2',
+                           # Range information, to guide the breaks:
+                           # sel1To9 = 5: hazard ratio lower interval minimum = .85, upper interval maximum = Inf, point hazard ratio minimum = 1.15, maximum = 2.37.
+                           breaks = c(.8, 1, 1.3, 1.6, 2, 2.4)))
 
 # Proportional hazards (PH) test assumption
 summary(collectCoxResLs[[resDfVec[sel1To9]]]$phTestp)
@@ -339,7 +361,7 @@ collectPrpResLs1 <- readRDS(file=propTests[1])
 collectPrpResLs2 <- readRDS(file=propTests[2])
 
 # S E L E C T  either collectPrpResLs1 or collectPrpResLs2, by assigning it to variable name 'collectPrpResLs'.
-collectPrpResLs <- collectPrpResLs2
+collectPrpResLs <- collectPrpResLs1
 #
 source(paste0(nsduhPath, "nsduhPropTestForestPlot.R"), echo = FALSE)
 # Display forest plot in R console
@@ -497,7 +519,7 @@ metaResHR <- c(meta.hr$TE.random,
 exp(metaResHR)
 # -------------------------------------------------
 
-# Run the following lines, only after you have run the code lines above (391-444).
+# Run the following lines, only after you have run the code lines above (418-519).
 #
 fpDf0 <- data.frame(
     model = c("rrMeta", "rrLme4", "rdMeta", "rdLme4", "orMeta", "orLme4"),
@@ -534,6 +556,10 @@ fpDfRRORHR$model <- forcats::as_factor(fpDfRRORHR$model)
 source(paste0(nsduhPath, "nsduhRRORHRMetaForestPlot.R"), echo = FALSE)
 # Display in R console
 rrorhrForest
+# Adjust x-axis (show tick marks 1, 1.2, 1.5, 1.7, and 2)
+(rrorhrForest <- rrorhrForest +
+        scale_x_continuous(trans = "log2",
+            breaks = c(1, 1.2, 1.5, 1.7, 2)))
 # -------------------------------------------------
 #
 # -----------------------------------------------
@@ -789,11 +815,15 @@ exp(metaResRRadj)
                        uci=exp(metaResRRadj)[5]))
 
 # Want to visualize?
-# BEWARE: First, you must run the code of steps 7 (Multilevel regression) and 8 (conventional meta-analysis), before running this code line (775).
+# BEWARE: First, you must run the code of steps 7 (Multilevel regression) and 8 (conventional meta-analysis), before running this code line (820).
 # ------------------
 source(paste0(nsduhPath, "nsduhRRMetaAdjForestPlot.R"), echo = FALSE)
 # Display in R console
 plotRRAdjForest
+# Adjust x-axis (show tick marks 1, 1.2, 1.5, 1.7, and 2)
+(plotRRAdjForest <- plotRRAdjForest +
+        scale_x_continuous(trans = "log2",
+                           breaks = c(1, 1.2, 1.5, 1.7, 2)))
 
 # Want to visualize differently?
 # Adjustment = Empirical adjustment of outcome misclassification bias.
@@ -801,6 +831,8 @@ plotRRAdjForest
 source(paste0(nsduhPath, "nsduhRRAdjForestPlot.R"), echo = FALSE)
 # Display in R console
 plotRisk
+# Adjust x-axis (log scaled)
+(plotRisk <- plotRisk + scale_x_continuous(trans = "log2"))
 # --------------------
 
 # Risk Difference (rd)
@@ -822,7 +854,7 @@ metaResRDadj
 
 # Want to visualize?
 # ------------------
-# BEWARE: First, you must run the code of steps 7 (Multilevel regression) and 8 (conventional meta-analysis), before running this code line (807).
+# BEWARE: First, you must run the code of steps 7 (Multilevel regression) and 8 (conventional meta-analysis), before running this code line (858).
 source(paste0(nsduhPath, "nsduhRDMetaAdjForestPlot.R"), echo = FALSE)
 # Display in R console
 plotRDAdjForest

@@ -30,10 +30,10 @@ plotHazard <-
     
     geom_vline(xintercept = 1, linetype = "dashed", color="red", linewidth=.5) +
     geom_vline(xintercept = 1.2, linetype = "dashed", color="magenta", linewidth=.5) +
-    
-    scale_x_continuous(trans='log2',
-                       breaks = c(1, 1.25, 1.5, 1.75, 2, 2.25),
-                       labels = c("1", "1.25", "1.5", "1.75", "2", "2.25")) +
+    # # Use below code as template, if you want to adapt the x-axis.
+    # scale_x_continuous(trans='log2',
+    #                    breaks = c(1, 1.25, 1.5, 1.75, 2, 2.25),
+    #                    labels = c("1", "1.25", "1.5", "1.75", "2", "2.25")) +
     scale_color_manual(values=c("gray", "steelblue"), labels = statSignLevel) +
     theme(
         panel.background = element_blank(),

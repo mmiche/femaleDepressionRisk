@@ -4,7 +4,7 @@ numberOfTests <- paste(nrow(resDf), "Tests")
 statSignLevel <- c(paste0("p >= ", runRiskDf$a[sel1To15]),
                    paste0("p < ", runRiskDf$a[sel1To15]))
 
-# Compatibility interval level.
+# Compatibility interval level. gsub(...) necessary, otherwise power = .995 will be messed up.
 (cixx <- gsub("\\.", "", 100-(runRiskDf$a[sel1To15]*100)))
 colsToPlot <- list(
     rr=c("rr",
@@ -20,8 +20,7 @@ pickCols <- colsToPlot[[selRiskMeas]]
 plotDf <- resDf[,pickCols]
 plotDf <- plotDf[order(plotDf[,4]),]
 
-# signif <- plotDf[,4] < runRiskDf$a[sel1To15]; notSignif <- !signif
-
+# Determine where 'statistical significance' starts and ends.
 if(selRiskMeas == "rr" | selRiskMeas == "or") {
     # If lower ci < 1 or upper ci > 1
     signif <- plotDf[,3] < 1 | plotDf[,2] > 1
@@ -30,7 +29,6 @@ if(selRiskMeas == "rr" | selRiskMeas == "or") {
     signif <- plotDf[,3] < 0 | plotDf[,2] > 0
 }
 notSignif <- !signif
-
 
 plotDf$StatSign <- NA
 plotDf$StatSign[signif] <- "steelblue"
@@ -53,37 +51,34 @@ if(selRiskMeas == "rr" | selRiskMeas == "or") {
     
     if(selRiskMeas == "rr") {
         plotRisk <- plotRisk +
-            xlab("Risk Ratio (RR)") +
-            scale_x_continuous(
-                trans='log2',
-                # RR 1, ..., 2.5
-                breaks =
-                    c(1, 1.25, 1.5, 1.75, 2, 2.25, 2.5),
-                labels =
-                    c("1", "1.25", "1.5", "1.75", "2", "2.25", "2.5"))
+            # # Use below code as template, if you want to adapt the x-axis.
+            # scale_x_continuous(
+            #     trans='log2',
+            #     # RR 1, ..., 4
+            #     breaks = 1:4) +
+            xlab("Risk Ratio (RR)")
     } else if(selRiskMeas == "or") {
         plotRisk <- plotRisk +
-            xlab("Odds Ratio (OR)") +
-            scale_x_continuous(
-                trans='log2',
-                # OR 1, ..., 3
-                breaks =
-                    c(1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3),
-                labels =
-                    c("1", "1.25", "1.5", "1.75", "2", "2.25", "2.5", "2.75", "3"))
+            # # Use below code as template, if you want to adapt the x-axis.
+            # scale_x_continuous(
+            #     trans='log2',
+            #     # OR 1, ..., 5
+            #     breaks = 1:5) +
+            xlab("Odds Ratio (OR)")
     }
 } else if(selRiskMeas == "rd") {
     plotRisk <- plotRisk +
         # Set 0 and 0.02 for RD.
         geom_vline(xintercept = 0, linetype = "dashed", color="red", linewidth=.5) +
         geom_vline(xintercept = .02, linetype = "dashed", color="magenta", linewidth=.5) +
-        xlab("Risk Difference (RD)") +
-        scale_x_continuous(
-            # RD 0, ..., 0.15
-            breaks =
-                c(0, .025, .05, .075, .1, .125, .15),
-            labels =
-                c("0", ".025", ".05", ".075", ".1", ".125", ".15"))
+        xlab("Risk Difference (RD)")
+        # # Use below code as template, if you want to adapt the x-axis.
+        # scale_x_continuous(
+        #     # RD 0, ..., 0.15
+        #     breaks =
+        #         c(0, .025, .05, .075, .1, .125, .15),
+        #     labels =
+        #         c("0", ".025", ".05", ".075", ".1", ".125", ".15"))
 }
 
 (plotRisk <- plotRisk +
@@ -92,7 +87,6 @@ if(selRiskMeas == "rr" | selRiskMeas == "or") {
         panel.background = element_blank(),
         axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=14),
-        # axis.text.y=element_text(size=14),
         axis.title.y = element_text(size=14),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
