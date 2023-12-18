@@ -596,7 +596,7 @@ summary(fit)
 
 bayesianLogreg <- plot(fit)
 
-# ggsave(filename="BayesianLogreg8.png", plot = bayesianLogreg[[1]], path = ggsavePath, device = "png", width=8, height=7, units="in", dpi=300)
+# ggsave(filename="BayesianLogreg.png", plot = bayesianLogreg[[1]], path = ggsavePath, device = "png", width=8, height=7, units="in", dpi=300)
 #
 # modelposterior is needed to compute autocorrelation results and to execute the Gelman-Rubin Divergence Diagnostic.
 modelposterior <- brms::as.mcmc(fit)

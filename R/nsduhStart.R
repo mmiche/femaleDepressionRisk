@@ -14,14 +14,14 @@ library(tidyverse)
 #
 # Instruction:
 # 1. Make a new directory (synonym: folder) on your computer.
-# 2. Put all 22 R scripts into this new directory.
+# 2. Put all 27 R scripts into this new directory.
 # 3. Put the complete dataset (N = 399'751) into this new directory.
 # > See R script 'makeNSDUHData.R', to generate this complete dataset, after having downloaded all 10 datasets from the years 2012-2021 from this URL (use the 'Choose Year' drop-down menu):
 # https://www.datafiles.samhsa.gov/dataset/national-survey-drug-use-and-health-2021-nsduh-2021-ds0001
 # 4. Set the complete path to this new directory on your computer. Set it here:
 nsduhPath <- "/Users/mmiche/Desktop/TeachingClass/HS2023/SeminarOpenScience/PsyArXivProjekt/R/"
 #
-# When initially running this code, you should save the collected results, so that you do not have to recompute the results time after time again. Therefore, remove the sharp (#) symbols in the script nsduhMain.R, in script lines 113-120, 172-173, and 252-256.
+# When initially running this code, you should save the collected results, so that you do not have to recompute the results time after time again. Therefore, remove the sharp (#) symbols in the script nsduhMain.R, in script lines 123-130, 183-184, and 264-268.
 # --------------------------------------------------
 #
 # How to find, copy, and paste the complete path to a directory?
