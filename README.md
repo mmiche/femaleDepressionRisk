@@ -19,7 +19,7 @@ Load the packages and set the complete path to the target directory **R**. See i
 Run all analyses and save the collected results as rds files. The collected results will be saved as rds files, so that the results do not have to be computed over and over again, every time you want to do something with the results, e.g., visualize them differently. Computing all results will take *approximately 15 minutes*.
 Collected results are saved in nsduhMain.R, script lines 123-130, 183-184, and 264-268. One more collected result is saved in nsduhResults.R, script lines 739-740. After they have been saved, I recommend to outcomment these script lines (put the sharp (#) symbol at beginning of each of these lines).
 
-### nsduhResults.R
+### nsduhResults.R
 When all collected results have been saved as rds files, they will be in the target directory **R**. In this nsduhResults.R script, the rds files (the results) are read and used for further purposes, i.e., displaying them in the R console, computing new results, e.g., convert p values to S values, and visualizing them.
 
 ## Comments
