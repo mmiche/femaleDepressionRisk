@@ -195,6 +195,14 @@ adjusted_rrrd <- function(adj2x2=NULL, runRiskDf=NULL, r=NULL) {
     adjRRlci <- exp(log(adjRR) - czVal * adjRRSE)
     adjRRuci <- exp(log(adjRR) + czVal * adjRRSE)
     
+    if(adjRR < 1) {
+        adjRRp <- pnorm(q=log(adjRR)/adjRRSE, lower.tail = TRUE)*2
+    } else if(adjRR > 1) {
+        adjRRp <- pnorm(q=log(adjRR)/adjRRSE, lower.tail = FALSE)*2
+    } else {
+        adjRRp <- 1
+    }
+    
     # Adjusted risk difference
     # ------------------------
     adjRD <- adjAbsRskExposed-adjAbsRskNonExposed
@@ -202,11 +210,21 @@ adjusted_rrrd <- function(adj2x2=NULL, runRiskDf=NULL, r=NULL) {
     adjRDlci <- adjRD - czVal * adjRDSE
     adjRDuci <- adjRD + czVal * adjRDSE
     
+    if(adjRD < 0) {
+        adjRDp <- pnorm(q=adjRD/adjRDSE, lower.tail = TRUE)*2
+    } else if(adjRD > 0) {
+        adjRDp <- pnorm(q=adjRD/adjRDSE, lower.tail = FALSE)*2
+    } else {
+        adjRDp <- 1
+    }
+    
+    
     # Return
     return(
         list(adjAbsRskExposed=adjAbsRskExposed, adjAbsRskNonExposed=adjAbsRskNonExposed,
              adjRR=adjRR, adjRRSE=adjRRSE, adjRRlci=adjRRlci, adjRRuci=adjRRuci,
-             adjRD=adjRD, adjRDSE=adjRDSE, adjRDlci=adjRDlci, adjRDuci=adjRDuci, z=czVal)
+             adjRD=adjRD, adjRDSE=adjRDSE, adjRDlci=adjRDlci, adjRDuci=adjRDuci,
+             z=czVal, adjRRp=adjRRp, adjRDp=adjRDp)
     )
 }
 

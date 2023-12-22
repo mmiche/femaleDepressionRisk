@@ -14,7 +14,7 @@ riskData1 <- riskData[-sample(x=1:nrow(riskData), size = remainingN),]
 # length(smpl)
 riskData1$smpl <- smpl
 
-# i <- 1
+# i <- 5
 rr_rd <- c()
 start <- Sys.time()
 for(i in 1:floor(possibleSamples)) {
@@ -82,7 +82,14 @@ for(i in 1:floor(possibleSamples)) {
     rr_rd <- c(rr_rd, rrlCI_i, rruCI_i)
     
     # Empirical p value
-    rrMod_iP <- pnorm(rr_coefs["sex","z value"], lower.tail = FALSE)
+    if(rr_i < 1) {
+        rrMod_iP <- pnorm(rr_coefs["sex","z value"], lower.tail = TRUE)*2
+    } else if(rr_i > 1) {
+        rrMod_iP <- pnorm(rr_coefs["sex","z value"], lower.tail = FALSE)*2
+    } else {
+        rrMod_iP <- 1
+    }
+    
     rr_rd <- c(rr_rd, rrMod_iP)
     
     # Specific null hypothesis, against the directed, yet unspecified alternative hypothesis.
@@ -90,7 +97,14 @@ for(i in 1:floor(possibleSamples)) {
     smryrrMod_i <- summary(rrMod_i)
     rr0 <- log(rrH0)
     rr_q_i <- (rrMod_i$coefficients["sex"] - rr0)/coefficients(smryrrMod_i)[2,"Std. Error"]
-    rrMod_iP_minH0 <- pnorm(q=rr_q_i, lower.tail = FALSE)
+    if(rr_q_i < 0) {
+        rrMod_iP_minH0 <- pnorm(q=rr_q_i, lower.tail = TRUE)*2
+    } else if(rr_q_i > 0) {
+        rrMod_iP_minH0 <- pnorm(q=rr_q_i, lower.tail = FALSE)*2
+    } else {
+        rrMod_iP_minH0
+    }
+    
     
     rr_rd <- c(rr_rd, rr_q_i, rrMod_iP_minH0)
     
@@ -117,7 +131,14 @@ for(i in 1:floor(possibleSamples)) {
     # rdMod_iP <- coefficients(summary(rdMod_i))["sex","Pr(>|z|)"]
     
     # Empirical p value
-    rdMod_iP <- pnorm(rd_coefs["sex","z value"], lower.tail = FALSE)
+    if(rd_i < 0) {
+        rdMod_iP <- pnorm(rd_coefs["sex","z value"], lower.tail = TRUE)*2
+    } else if(rd_i > 0) {
+        rdMod_iP <- pnorm(rd_coefs["sex","z value"], lower.tail = FALSE)*2
+    } else {
+        rdMod_iP <- 1
+    }
+    
     rr_rd <- c(rr_rd, rdMod_iP)
     
     # Specific null hypothesis, against the directed, yet unspecified alternative hypothesis.
@@ -125,7 +146,13 @@ for(i in 1:floor(possibleSamples)) {
     smryrdMod_i <- summary(rdMod_i)
     rd0 <- rdH0
     rd_q_i <- (rdMod_i$coefficients["sex"] - rd0)/coefficients(smryrdMod_i)[2,"Std. Error"]
-    rdMod_iP_minH0 <- pnorm(q=rd_q_i, lower.tail = FALSE)
+    if(rd_q_i < 0) {
+        rdMod_iP_minH0 <- pnorm(q=rd_q_i, lower.tail = TRUE)*2
+    } else if(rd_q_i > 0) {
+        rdMod_iP_minH0 <- pnorm(q=rd_q_i, lower.tail = FALSE)*2
+    } else {
+        rdMod_iP_minH0
+    }
     
     rr_rd <- c(rr_rd, rd_q_i, rdMod_iP_minH0)
     
