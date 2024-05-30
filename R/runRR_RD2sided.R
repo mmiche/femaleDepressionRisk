@@ -14,7 +14,7 @@ riskData1 <- riskData[-sample(x=1:nrow(riskData), size = remainingN),]
 # length(smpl)
 riskData1$smpl <- smpl
 
-# i <- 5
+i <- 1
 rr_rd <- c()
 start <- Sys.time()
 for(i in 1:floor(possibleSamples)) {

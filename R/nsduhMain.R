@@ -273,5 +273,5 @@ difftime(timeAllEnd, timeAllStart)
 # -------------------------------------------------
 # Bayes logistic regression (brms package)
 # -------------------------
-# See R script nsduhResult.R, script lines 520-570.
+# See R script nsduhResult.R, script lines 568-618.
 # -------------------------------------------------

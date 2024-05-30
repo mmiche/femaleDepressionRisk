@@ -292,8 +292,9 @@ colnames(collapsibilityDf) <- c("absRiskTotal", "riskCollapsed",
 # BEWARE: It takes up a considerable amount of time to compute the multilevel models below. It does not make sense to do that, because the results are in the end very similar. They must be quite similar, because always almost the same total sample size is used, only the size of the single samples differ, according to the sample size computation, based on the a priori effect size, alpha level, and power. Since in multilevel analyses, the results (intercepts and/or slopes) from all single samples are integrated, the overall estimates cannot vary a lot, across our 15 different setups.
 # Conclusion: We ran the 15 analyses, the multilevel summary estimates were very similar, we would not do it again, and we therefore recommend to not waste your computer's time and energy.
 # -------------------------------------------------
+# lme4summaryOutput <- smryModRD; alphaLevel = runRiskDf$a[r]
 # makeCIlme4 <- function(lme4summaryOutput=NULL, alphaLevel=NULL) {
-#     
+# 
 #     effest <- lme4summaryOutput$coefficients["sex","Estimate"]
 #     effSE <- lme4summaryOutput$coefficients["sex","Std. Error"]
 #     # Use current alpha level to compute critical z value for two.sided test.
@@ -303,11 +304,11 @@ colnames(collapsibilityDf) <- c("absRiskTotal", "riskCollapsed",
 #     effUci <- effest + effSE * czVal2Sided
 #     return(c(effest, effLci, effUci))
 # }
-# 
+# # 
 # # Risk difference (random intercept, random slope)
 # multModRD <- lme4::glmer(ltmde ~ sex + (sex|smpl), family = binomial(link="identity"), data=riskData1)
 # smryModRD <- summary(multModRD)
-# 
+# # 
 # # effect estimate with x% compatibility interval
 # resRD <- makeCIlme4(lme4summaryOutput = smryModRD, alphaLevel = runRiskDf$a[r])
 # 

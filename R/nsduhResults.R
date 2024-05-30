@@ -65,27 +65,27 @@ collectRiskResLs <- readRDS(file=paste0(nsduhPath, "collectRiskResLs.rds"))
 names(collectRiskResLs)
 
 resDfVec <- names(collectRiskResLs)[seq(1,length(collectRiskResLs),by=4)]
-# actyI: actual type I error; sH0: specified null hypothesis
-actyIrr <- actyIrrsH0 <- actyIrd <- actyIrdsH0 <- actyIor <- actyIorsH0 <- c()
+# obtyI: observed type I error; sH0: specified null hypothesis
+obtyIrr <- obtyIrrsH0 <- obtyIrd <- obtyIrdsH0 <- obtyIor <- obtyIorsH0 <- c()
 lowerCI <- rep(c("l95", "l99", "l995"), each=5)
-# actyI: actual type I error, CI, use compatibility interval, instead of empirical p value.
-actyIrrCI <- actyIrrsH0CI <- actyIrdCI <- actyIrdsH0CI <- actyIorCI <- actyIorsH0CI <- c()
+# obtyI: observed type I error, CI, use compatibility interval, instead of empirical p value.
+obtyIrrCI <- obtyIrrsH0CI <- obtyIrdCI <- obtyIrdsH0CI <- obtyIorCI <- obtyIorsH0CI <- c()
 for(p in 1:nrow(runRiskDf)) {
     
     # Total number of conducted tests
     tnoct <- nrow(collectRiskResLs[[resDfVec[p]]])
     
     # Risk ratio
-    actyIrr <- c(actyIrr, length(which(collectRiskResLs[[resDfVec[p]]]$rrp >= runRiskDf$a[p]))/tnoct)
-    actyIrrsH0 <- c(actyIrrsH0, length(which(collectRiskResLs[[resDfVec[p]]]$rrpsH0 >= runRiskDf$a[p]))/tnoct)
+    obtyIrr <- c(obtyIrr, length(which(collectRiskResLs[[resDfVec[p]]]$rrp >= runRiskDf$a[p]))/tnoct)
+    obtyIrrsH0 <- c(obtyIrrsH0, length(which(collectRiskResLs[[resDfVec[p]]]$rrpsH0 >= runRiskDf$a[p]))/tnoct)
     
     # Risk difference
-    actyIrd <- c(actyIrd, length(which(collectRiskResLs[[resDfVec[p]]]$rdp >= runRiskDf$a[p]))/tnoct)
-    actyIrdsH0 <- c(actyIrdsH0, length(which(collectRiskResLs[[resDfVec[p]]]$rdpsH0 >= runRiskDf$a[p]))/tnoct)
+    obtyIrd <- c(obtyIrd, length(which(collectRiskResLs[[resDfVec[p]]]$rdp >= runRiskDf$a[p]))/tnoct)
+    obtyIrdsH0 <- c(obtyIrdsH0, length(which(collectRiskResLs[[resDfVec[p]]]$rdpsH0 >= runRiskDf$a[p]))/tnoct)
     
     # Odds ratio
-    actyIor <- c(actyIor, length(which(collectRiskResLs[[resDfVec[p]]]$orp >= runRiskDf$a[p]))/tnoct)
-    actyIorsH0 <- c(actyIorsH0, length(which(collectRiskResLs[[resDfVec[p]]]$orpsH0 >= runRiskDf$a[p]))/tnoct)
+    obtyIor <- c(obtyIor, length(which(collectRiskResLs[[resDfVec[p]]]$orp >= runRiskDf$a[p]))/tnoct)
+    obtyIorsH0 <- c(obtyIorsH0, length(which(collectRiskResLs[[resDfVec[p]]]$orpsH0 >= runRiskDf$a[p]))/tnoct)
     
     # ------------------------------
     # Re-check by using the observed 'success' rate: Use compatibility interval, ask how often its lower bound is greater than 1.0 and 1.2, respectively.
@@ -93,16 +93,16 @@ for(p in 1:nrow(runRiskDf)) {
     # ------------------------------
     
     # Risk ratio
-    actyIrrCI <- c(actyIrrCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rr", lowerCI[p])] > 1.0))/tnoct)
-    actyIrrsH0CI <- c(actyIrrsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rr", lowerCI[p])] > 1.2))/tnoct)
+    obtyIrrCI <- c(obtyIrrCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rr", lowerCI[p])] > 1.0))/tnoct)
+    obtyIrrsH0CI <- c(obtyIrrsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rr", lowerCI[p])] > 1.2))/tnoct)
     
     # Risk difference
-    actyIrdCI <- c(actyIrdCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rd", lowerCI[p])] > 0))/tnoct)
-    actyIrdsH0CI <- c(actyIrdsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rd", lowerCI[p])] > .02))/tnoct)
+    obtyIrdCI <- c(obtyIrdCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rd", lowerCI[p])] > 0))/tnoct)
+    obtyIrdsH0CI <- c(obtyIrdsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("rd", lowerCI[p])] > .02))/tnoct)
     
     # Odds ratio
-    actyIorCI <- c(actyIorCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("or", lowerCI[p])] > 1.0))/tnoct)
-    actyIorsH0CI <- c(actyIorsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("or", lowerCI[p])] > 1.2))/tnoct)
+    obtyIorCI <- c(obtyIorCI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("or", lowerCI[p])] > 1.0))/tnoct)
+    obtyIorsH0CI <- c(obtyIorsH0CI, length(which(collectRiskResLs[[resDfVec[p]]][,paste0("or", lowerCI[p])] > 1.2))/tnoct)
 }
 
 # When empirical p-value >= designated alpha significance level, this means that, given the a priori expected effect size, the alpha level, and the power, resulting in the computed minimum sample size, the designated null effect was part of the compatibility interval in x% of all conducted tests.
@@ -110,25 +110,27 @@ for(p in 1:nrow(runRiskDf)) {
 # Append to runRiskDf:
 runRiskDf <- cbind(runRiskDf,
                    data.frame(
-                       actyIrr, actyIrrsH0,
-                       actyIrd, actyIrdsH0,
-                       actyIor, actyIorsH0,
-                       actyIrrCI, actyIrrsH0CI,
-                       actyIrdCI, actyIrdsH0CI,
-                       actyIorCI, actyIorsH0CI)
+                       obtyIrr, obtyIrrsH0,
+                       obtyIrd, obtyIrdsH0,
+                       obtyIor, obtyIorsH0,
+                       obtyIrrCI, obtyIrrsH0CI,
+                       obtyIrdCI, obtyIrdsH0CI,
+                       obtyIorCI, obtyIorsH0CI)
                    )
 # Display complete runRiskDf in R console:
 runRiskDf
-runRiskDf[,c("p0", "p1", "a", "requiredN", "power", "actyIrr", "actyIrd", "actyIor")]
+runRiskDf[,c("p0", "p1", "a", "requiredN", "power", "obtyIrr", "obtyIrd", "obtyIor")]
+# Compare observed type I error for conventional and specific H0.
+runRiskDf[,c("p0", "p1", "a", "requiredN", "power", "obtyIrr", "obtyIrrsH0", "obtyIrd", "obtyIrdsH0")]
 # Run the check, whether the observed error rate, using the empirical p-value, and whether the 'success' rate of the conventional and the specified null hypothesis add up to 1.
 # Check conventional H0
-all((runRiskDf$actyIrr + runRiskDf$actyIrrCI)==1)
-all((runRiskDf$actyIrd + runRiskDf$actyIrdCI)==1)
-all((runRiskDf$actyIor + runRiskDf$actyIorCI)==1)
+all((runRiskDf$obtyIrr + runRiskDf$obtyIrrCI)==1)
+all((runRiskDf$obtyIrd + runRiskDf$obtyIrdCI)==1)
+all((runRiskDf$obtyIor + runRiskDf$obtyIorCI)==1)
 # Same with specific H0 (sH0)
-all((runRiskDf$actyIrrsH0 + runRiskDf$actyIrrsH0CI)==1)
-all((runRiskDf$actyIrdsH0 + runRiskDf$actyIrdsH0CI)==1)
-all((runRiskDf$actyIorsH0 + runRiskDf$actyIorsH0CI)==1)
+all((runRiskDf$obtyIrrsH0 + runRiskDf$obtyIrrsH0CI)==1)
+all((runRiskDf$obtyIrdsH0 + runRiskDf$obtyIrdsH0CI)==1)
+all((runRiskDf$obtyIorsH0 + runRiskDf$obtyIorsH0CI)==1)
 
 # Want to visualize?
 # ------------------
@@ -186,6 +188,10 @@ plotRisk <- plotRisk +
 
 # ---------------------------------------
 # Collapsibility problem
+# Not presented in main document or in the supplementary document.
+# Interested? Literature suggestions:
+# https://doi.org/10.1016/j.jclinepi.2021.06.007
+# https://doi.org/10.1016/j.jclinepi.2021.06.004
 # ---------------------------------------
 
 collectCollapsedLs <- readRDS(file=paste0(nsduhPath, "collectCollapsedLs.rds"))
@@ -232,34 +238,34 @@ collectCoxResLs <- readRDS(file=paste0(nsduhPath, "collectCoxResLs.rds"))
 
 resDfVec <- names(collectCoxResLs)[seq(1,length(collectCoxResLs),by=2)]
 lowerCI <- rep(c("l95", "l99", "l995"), times=3)
-# actyI: actual type I error; sH0: specified null hypothesis
-actyIhr <- actyIhrsH0 <- actyIhrCI <- actyIhrsH0CI <- c()
+# obtyI: observed type I error; sH0: specified null hypothesis
+obtyIhr <- obtyIhrsH0 <- obtyIhrCI <- obtyIhrsH0CI <- c()
 for(p in 1:nrow(runCoxDf)) {
     
     # Total number of conducted tests
     tnoct <- nrow(collectCoxResLs[[resDfVec[p]]])
     
-    actyIhr <- c(actyIhr, length(which(collectCoxResLs[[resDfVec[p]]]$hrp >= runCoxDf$a[p]))/tnoct)
-    actyIhrsH0 <- c(actyIhrsH0, length(which(collectCoxResLs[[resDfVec[p]]]$hrpsH0 >= runCoxDf$a[p]))/tnoct)
+    obtyIhr <- c(obtyIhr, length(which(collectCoxResLs[[resDfVec[p]]]$hrp >= runCoxDf$a[p]))/tnoct)
+    obtyIhrsH0 <- c(obtyIhrsH0, length(which(collectCoxResLs[[resDfVec[p]]]$hrpsH0 >= runCoxDf$a[p]))/tnoct)
     
-    actyIhrCI <- c(actyIhrCI, length(which(collectCoxResLs[[resDfVec[p]]][,paste0("hr", lowerCI[p])] > 1.0))/tnoct)
-    actyIhrsH0CI <- c(actyIhrsH0CI, length(which(collectCoxResLs[[resDfVec[p]]][,paste0("hr", lowerCI[p])] > 1.2))/tnoct)
+    obtyIhrCI <- c(obtyIhrCI, length(which(collectCoxResLs[[resDfVec[p]]][,paste0("hr", lowerCI[p])] > 1.0))/tnoct)
+    obtyIhrsH0CI <- c(obtyIhrsH0CI, length(which(collectCoxResLs[[resDfVec[p]]][,paste0("hr", lowerCI[p])] > 1.2))/tnoct)
     
 }
 # Append to runCoxDf:
 runCoxDf <- cbind(runCoxDf,
                   data.frame(
-                      actyIhr, actyIhrsH0,
-                      actyIhrCI, actyIhrsH0CI)
+                      obtyIhr, obtyIhrsH0,
+                      obtyIhrCI, obtyIhrsH0CI)
                   )
 # Display in R console
 runCoxDf
 
 # Run the check, whether the observed error rate, using the empirical p-value, and whether the 'success' rate of the conventional and the specified null hypothesis add up to 1.
 # Check conventional H0
-all((runCoxDf$actyIhr + runCoxDf$actyIhrCI)==1)
+all((runCoxDf$obtyIhr + runCoxDf$obtyIhrCI)==1)
 # Same with specific H0 (sH0)
-all((runCoxDf$actyIhrsH0 + runCoxDf$actyIhrsH0CI)==1)
+all((runCoxDf$obtyIhrsH0 + runCoxDf$obtyIhrsH0CI)==1)
 
 # Want to visualize?
 # ------------------
@@ -349,8 +355,8 @@ for(pr in 1:length(propTests)) {
                              length(which(collectPrpResLs[[prpTestDfVec[r]]]$conf.low<0))/nrow(collectPrpResLs[[prpTestDfVec[r]]]))
         
     }
-    runPropTstDf$prpTestActyI <- prpTstErrorRate
-    runPropTstDf$prpTestFreqAlpha <- runPropTstDf$prpTestActyI < runPropTstDf$a
+    runPropTstDf$prpTestObtyI <- prpTstErrorRate
+    runPropTstDf$prpTestFreqAlpha <- runPropTstDf$prpTestObtyI < runPropTstDf$a
     
     propTestResLs[[nameRes[pr]]] <- runPropTstDf
 }
@@ -361,7 +367,7 @@ collectPrpResLs1 <- readRDS(file=propTests[1])
 collectPrpResLs2 <- readRDS(file=propTests[2])
 
 # S E L E C T  either collectPrpResLs1 or collectPrpResLs2, by assigning it to variable name 'collectPrpResLs'.
-collectPrpResLs <- collectPrpResLs1
+collectPrpResLs <- collectPrpResLs2
 #
 source(paste0(nsduhPath, "nsduhPropTestForestPlot.R"), echo = FALSE)
 # Display forest plot in R console
@@ -574,7 +580,7 @@ collectRiskResLs <- readRDS(file=paste0(nsduhPath, "collectRiskResLs.rds"))
 rrVec <- grep("rr", names(collectRiskResLs))
 
 # Overview of the range of risk ratio (rr) results across all analyses.
-summary(collectRiskResLs[[rrVec[sel1To15]]]$rr)
+sel1To15 <- 8; summary(collectRiskResLs[[rrVec[sel1To15]]]$rr)
 # Select risk ratio results between 1.64 and 1.66 (median and mean rr for sel1To15 = 8)
 idx1.64.66 <- collectRiskResLs[[rrVec[sel1To15]]]$rr >= 1.64 & collectRiskResLs[[rrVec[sel1To15]]]$rr <= 1.66
 # Display in R console
@@ -629,10 +635,13 @@ collectRiskResLs <- readRDS(file=paste0(nsduhPath, "collectRiskResLs.rds"))
 # 4. Specificity of outcome classification among those without the exposure.
 
 resDfVec <- names(collectRiskResLs)[seq(1,length(collectRiskResLs),by=4)]
-rrDfVec <- names(collectRiskResLs)[seq(3,length(collectRiskResLs),by=4)]
+rrDfVec <- names(collectRiskResLs)[seq(2,length(collectRiskResLs),by=4)]
 
-# Outcome misclassification bias adjustment, selected setting.
-se1Set <- .7; se0Set <- .45; sp1Set <- .95; sp0Set <- sp1Set
+# # Outcome misclassification bias adjustment, selected setting.
+# se1Set <- .7; se0Set <- .45; sp1Set <- .95; sp0Set <- sp1Set
+# se1Set <- .9; se0Set <- .7; sp1Set <- .95; sp0Set <- sp1Set
+# No.16 out of 24 (see Table 3 in main document).
+se1Set <- .9; se0Set <- .8; sp1Set <- .95; sp0Set <- sp1Set
 
 # Collect results in these four lists:
 adjLs <- posnegLRLs <- lkhrTestLs <- collapseLs <- list()
@@ -661,7 +670,7 @@ for(r in 1:nrow(runRiskDf)) {
             rrrdRes$adjRRlci, rrrdRes$adjRRuci,
             rrrdRes$adjRD, rrrdRes$adjRDSE,
             rrrdRes$adjRDlci, rrrdRes$adjRDuci,
-            rrrdRes$z)))
+            rrrdRes$z, rrrdRes$adjRRp, rrrdRes$adjRDp)))
         
         # Get likelihood ratios, based on 2x2 table:
         tbl2x2 <- matrix(data=c(df2x2$TN[a],
@@ -701,7 +710,8 @@ for(r in 1:nrow(runRiskDf)) {
     getResultsDf <- data.frame(matrix(data=getResults, nrow = nrow(df2x2), byrow = TRUE))
     colnames(getResultsDf) <- c(
         "adjrr", "adjrrSE", "adjrrLci", "adjrrUci",
-        "adjrd", "adjrdSE", "adjrdLci", "adjrdUci", "zval")
+        "adjrd", "adjrdSE", "adjrdLci", "adjrdUci",
+        "zval", "adjrrp", "adjrdp")
     adjLs[[resDfVec[r]]] <- data.frame(getResultsDf)
     
     #
@@ -736,8 +746,8 @@ for(r in 1:nrow(runRiskDf)) {
 # =========================
 # Save results as rds file:
 # -------------------------
-saveRDS(object=adjLs,
-        file=paste0(nsduhPath, "misclassifAdjustedLs.rds"))
+# saveRDS(object=adjLs,
+#         file=paste0(nsduhPath, "misclassifAdjustedLs.rds"))
 # =========================
 
 df2x2Plr <- data.frame(

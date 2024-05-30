@@ -132,7 +132,6 @@ prepareCollapse <- function(tbl2x2Clps=NULL, tbl2x2AdjClps=NULL) {
 # See Greenland (2019) https://doi.org/10.1080/00031305.2018.1529625
 Sfun <- function(x) {-log(x=x, base = 2)}
 
-
 # Misclassification bias correction
 
 # a = TP, b = FN, c = FP, d = TN
@@ -146,6 +145,13 @@ outcomeMiscAdj2x2 <- function(a, b, c, d, se1, se0, sp1, sp0) {
     C <- Ep - A
     D <- Em - B
     tbl <- as.table(matrix(data=c(A, B, C, D), nrow=2, byrow = TRUE))
+    
+    # If any cell contains values <= 0, return a matrix with value 1 in each cell.
+    if(any(tbl<=0)) {
+        A <- B <- C <- D <- 1
+        tbl <- as.table(matrix(data=c(A, B, C, D), nrow=2, byrow = TRUE))
+    }
+    
     dimnames(tbl) <- list(c("outcome+", "outcome-"),
                           c("exposure+", "exposure-"))
     return(tbl)

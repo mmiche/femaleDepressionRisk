@@ -41,6 +41,6 @@ plotProp <-
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         panel.border = element_rect(color="black", fill=NA),
-        legend.position = "top")
+        legend.position = "none")
 
 # ggsave(filename="plotPropTest.png", plot = plotProp, path = ggsavePath, device = "png", width=8, height=7, units="in", dpi=300)

@@ -14,13 +14,15 @@ setwd("/Users/mmiche/Desktop/TeachingClass/HS2023/SeminarOpenScience/PsyArXivPro
 nsduhDatasets <- list.files()
 years <- 2012:2021
 
-# Empty list, with which to collect the 10 datasets of the years 2012-2021
+# Empty list, with which to collect the 10 datasets of the years
+# 2012-2021
 nsduhLs <- list()
 start <- Sys.time()
 for(i in 1:length(nsduhDatasets)) {
     # Load the data (format .RData)
     load(nsduhDatasets[i])
-    # NSDUH original datasets, when loaded in R, start with "PUF" (years 2012-2019; 2021) or with NSDUH (year 2020).
+    # NSDUH original datasets, when loaded in R, start with "PUF"
+    # (years 2012-2019; 2021) or with NSDUH (year 2020).
     # Search for current dataset in the workspace.
     datTmpName <- ls()[grepl("PUF", ls()) | grepl("NSDUH", ls())]
     # Assign the dataset to a variable name (Tmp = temporary)

@@ -19,6 +19,7 @@ riskData1$smpl <- smpl
 hr_clct <- c()
 hrMeta <- c()
 start <- Sys.time()
+# i <- 1
 for(i in 1:floor(possibleSamples)) {
     
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -29,10 +30,15 @@ for(i in 1:floor(possibleSamples)) {
     hrModNull <- survival::coxph(Surv(ageClass, ltmde) ~ 1, data=riskData1[smpl==i,])
     hrMod_i <- survival::coxph(Surv(ageClass, ltmde) ~ sex, data=riskData1[smpl==i,])
     
+    # https://adibender.github.io/pammtools/articles/strata.html
+    hrMod_i <- survival::coxph(Surv(ageClass, ltmde) ~ strata(sex), data=riskData1[smpl==i,])
+    fithaz <- basehaz(hrMod_i)
+    ggplot(data=fithaz, aes(x=time)) + geom_step(aes(y=hazard, group=strata))# + ylim(0,1)
+    
     # Cox regression test assumptions
     # -------------------------------
     # ----------------
-    # Test proportional hazards (statistical test should not be stat. significant, which indicates that the proportional hazards assumption appear valid.)
+    # Test proportional hazards (statistical test should not be stat. significant, which indicates that the proportional hazards assumption may be valid.)
     test.ph <- cox.zph(hrMod_i)
     phTestp <- test.ph$table[1,"p"]
     # # Want to plot the proportional hazards assumption test result: The survminer package must be installed.
@@ -74,7 +80,7 @@ for(i in 1:floor(possibleSamples)) {
     hr_clct <- c(hr_clct, hr_q_i, hrMod_iP_minH0)
     
     # # --------------
-    # # log-likelihood for risk ratio
+    # # log-likelihood for hazard ratio
     # # --------------
     hr_lgkNull <- logLik(hrModNull)
     hr_lgkMod <- logLik(hrMod_i)
