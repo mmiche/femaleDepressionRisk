@@ -9,27 +9,5 @@ Download 10 NSDUH datasets (years 2012-2021) from this [this website](https://ww
 ## Check
 In the target directory R on your computer, there should be 30 R scripts and 13 rds files. Correct? Please check, then continue.
 
-## Only 3 R scripts
-Only 3 R scripts need to be open, if you already possess the full 10-year NSDUH dataset. The remaining R scripts are used automatically, by executing their code from within these 3 R scripts:
-
-### nsduhStart.R
-Load the packages and set the complete path to the target directory **R**. See instructions on how to set the complete path, having either a Mac or a Windows computer (problems mostly have to do with these two symbols: \ and /.
-
-### nsduhMain.R
-Run all analyses and save the collected results as rds files. The collected results will be saved as rds files, so that the results do not have to be computed over and over again, every time you want to do something with the results, e.g., visualize them differently. Computing all results will take *approximately 15 minutes*.
-Collected results are saved in nsduhMain.R, script lines 123-130, 183-184, and 264-268. One more collected result is saved in nsduhResults.R, script lines 739-740. After they have been saved, I recommend to outcomment these script lines (put the sharp (#) symbol at beginning of each of these lines).
-
-### nsduhResults.R
-When all collected results have been saved as rds files, they will be in the target directory **R**. In this nsduhResults.R script, the rds files (the results) are read and used for further purposes, i.e., displaying them in the R console, computing new results, e.g., convert p values to S values, and visualizing them.
-
-## Comments
-Always read the comments in the R scripts. They are there to explain or remind what the R code does and what purpose it serves. I will add some comments in the R scripts at places that require comments but so far have none; the updated version will be uploaded to this GitHub repository.
-
-## 2 choices
-Two choices **by you** are necessary (see nsduhResults.R, script lines 20 and 22):
-
-### Script line 20
-From 15 available results (risk ratio, risk difference, odds ratio), select one, i.e., select a number between 1 and 15.
-
-### Script line 22
-From 9 available results (hazard ratio), select one, i.e., select a number between 1 and 9.
+## Tasks
+For the tasks of the 30 R scripts, please see Appendix A of the Supplementary Document. The rds files are mostly saved output from the R scripts, in order to not have to run the code every time.
