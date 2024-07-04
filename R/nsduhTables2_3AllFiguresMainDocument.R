@@ -378,6 +378,63 @@ plotRawAdj10 <- cowplot::plot_grid(plot10Test, rrAdjPlot10Test, ncol=2, labels =
 collectRiskResLs <- readRDS(file=paste0(nsduhPath, "collectRiskResLs.rds"))
 resDfVec <- names(collectRiskResLs)[seq(1,length(collectRiskResLs),by=4)]
 
+# rrMeta15 = Table that is visualized in Plot A of Figure 8 in MainDocument.
+# -------------------------------------------------------------------------
+rrDfVec <- names(collectRiskResLs)[seq(2,length(collectRiskResLs),by=4)]
+rrMetaLs <- list()
+for(i in 1:15) {
+    
+    rrMeta <- collectRiskResLs[[rrDfVec[i]]]
+    
+    if(any((1:5) %in% i)) {
+        meta.rr <- meta::metagen(TE=log(rr), lower = log(rrl95), upper = log(rru95), sm="RR", prediction = TRUE, data = rrMeta)
+    } else if(any((6:10) %in% i)) {
+        meta.rr <- meta::metagen(TE=log(rr), lower = log(rrl99), upper = log(rru99), sm="RR", prediction = TRUE, data = rrMeta)
+    } else if(any((11:15) %in% i)) {
+        meta.rr <- meta::metagen(TE=log(rr), lower = log(rrl995), upper = log(rru995), sm="RR", prediction = TRUE, data = rrMeta)
+    }
+    
+    rrMeta_i <- data.frame(
+        matrix(exp(c(meta.rr$TE.random,
+                     meta.rr$lower.predict,
+                     meta.rr$upper.predict)), ncol=3))
+    colnames(rrMeta_i) <- c("estimate", "lPI", "uPI")
+    rrMetaLs[[rrDfVec[i]]] <- rrMeta_i
+    
+}
+rrMeta15 <- dplyr::bind_rows(rrMetaLs)
+
+# rdMeta15 = Table that is visualized in Plot B of Figure 8 in MainDocument.
+# -------------------------------------------------------------------------
+rdDfVec <- names(collectRiskResLs)[seq(3,length(collectRiskResLs),by=4)]
+rdMetaLs <- list()
+for(i in 1:15) {
+    
+    rdMeta <- collectRiskResLs[[rdDfVec[i]]]
+    
+    if(any((1:5) %in% i)) {
+        meta.rd <- meta::metagen(TE=rd, lower = rdl95, upper = rdu95, sm="RD", prediction = TRUE, data = rdMeta)
+    } else if(any((6:10) %in% i)) {
+        meta.rd <- meta::metagen(TE=rd, lower = rdl99, upper = rdu99, sm="RD", prediction = TRUE, data = rdMeta)
+    } else if(any((11:15) %in% i)) {
+        meta.rd <- meta::metagen(TE=rd, lower = rdl995, upper = rdu995, sm="RD", prediction = TRUE, data = rdMeta)
+    }
+    
+    rdMeta_i <- data.frame(
+        matrix(c(meta.rd$TE.random,
+                meta.rd$lower.predict,
+                meta.rd$upper.predict), ncol=3))
+    colnames(rdMeta_i) <- c("estimate", "lPI", "uPI")
+    rdMetaLs[[rdDfVec[i]]] <- rdMeta_i
+    
+}
+rdMeta15 <- dplyr::bind_rows(rdMetaLs)
+
+# saveRDS(object=rrMeta15, file=paste0(nsduhPath, "rrMeta.rds"))
+# saveRDS(object=rdMeta15, file=paste0(nsduhPath, "rdMeta.rds"))
+
+# Make Figure 8:
+
 rrVec <- rdVec <- run <- c()
 # i <- 1
 for(i in 1:15) {
@@ -786,9 +843,9 @@ for(l in 1:length(collectLs)) {
         
         # Make data.frame for plotting:
         adjrrDf <- data.frame(model="adjRRMeta",
-                              est=exp(metaResRRadj)[1],
-                              lci=exp(metaResRRadj)[4],
-                              uci=exp(metaResRRadj)[5])
+                              estimate=exp(metaResRRadj)[1],
+                              lPI=exp(metaResRRadj)[4],
+                              uPI=exp(metaResRRadj)[5])
         
         rradjLs[[sel1To15]] <- adjrrDf
         
@@ -803,9 +860,9 @@ for(l in 1:length(collectLs)) {
         
         # Make data.frame for plotting:
         adjrdDf <- data.frame(model="adjRDMeta",
-                              est=metaResRDadj[1],
-                              lci=metaResRDadj[4],
-                              uci=metaResRDadj[5])
+                              estimate=metaResRDadj[1],
+                              lPI=metaResRDadj[4],
+                              uPI=metaResRDadj[5])
         
         rdadjLs[[sel1To15]] <- adjrdDf
         
@@ -830,9 +887,9 @@ idxOn <- adjrrMetaDf0$biasModel %in% 1:8 # 9:16
 adjrrMetaDf <- adjrrMetaDf0[idxOn,]
 
 plotRRAdjForest <- 
-    ggplot(adjrrMetaDf, aes(x=est, y=model)) +
+    ggplot(adjrrMetaDf, aes(x=estimate, y=model)) +
     geom_point(shape=124, size=5) +
-    geom_errorbar(width=.55, aes(xmin=lci, xmax=uci), linewidth=1) +
+    geom_errorbar(width=.55, aes(xmin=lPI, xmax=uPI), linewidth=1) +
     geom_vline(xintercept = 1, linetype = "dashed", color="red", linewidth=1) +
     geom_vline(xintercept = 1.2, linetype = "dashed", color="magenta", linewidth=1) +
     scale_x_continuous(trans = "log2",
@@ -860,9 +917,9 @@ idxOn <- adjrdMetaDf0$biasModel %in% 1:8 # 9:16
 adjrdMetaDf <- adjrdMetaDf0[idxOn,]
 
 plotRDAdjForest <- 
-    ggplot(adjrdMetaDf, aes(x=est, y=model)) +
+    ggplot(adjrdMetaDf, aes(x=estimate, y=model)) +
     geom_point(shape=124, size=5) +
-    geom_errorbar(width=.55, aes(xmin=lci, xmax=uci), linewidth=1) +
+    geom_errorbar(width=.55, aes(xmin=lPI, xmax=uPI), linewidth=1) +
     geom_vline(xintercept = 0, linetype = "dashed", color="red", linewidth=1) +
     geom_vline(xintercept = 0.02, linetype = "dashed", color="magenta", linewidth=1) +
     xlab(label="Misclassification bias adjusted RD") +
